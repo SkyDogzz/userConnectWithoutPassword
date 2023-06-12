@@ -36,3 +36,5 @@ if ($getPasswordResult->num_rows > 0) {
 
 $conn->close();
 ?>
+
+<a href="/">Retour à l'accueil</a>
