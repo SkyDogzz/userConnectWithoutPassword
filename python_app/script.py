@@ -13,6 +13,10 @@ database = config['database']['name']
 user = config['database']['username']
 password = config['database']['password']
 
+# Récupérer les informations de connexion à la tqble users  
+userField = config['database']['user_field']
+passwordField = config['database']['password_field']
+
 # Récupérer le sel personnalisé
 salt = config['salt']
 
@@ -37,8 +41,8 @@ if result is None:
 else:
     # Afficher les informations de l'utilisateur
     print("Informations de l'utilisateur :")
-    print("Nom d'utilisateur :", result[0])
-    print("Mot de passe :", result[1])
+    print("Nom d'utilisateur :", result[userField])
+    print("Mot de passe :", result[passwordField])
 
     # Demander confirmation pour la modification
     confirmation = input("Voulez-vous vraiment modifier le mot de passe de cet utilisateur ? (Oui/Non) ")
@@ -49,7 +53,7 @@ else:
 
         try:
             # Sauvegarder l'ancien mot de passe hashé dans un fichier avec la date et l'heure
-            ancien_mot_de_passe = result[1]
+            ancien_mot_de_passe = result[passwordField]
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             backup_filename = f"password_backup_hash_{timestamp}.txt"
 
