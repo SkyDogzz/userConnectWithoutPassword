@@ -56,6 +56,12 @@ Ces instructions devraient vous aider à créer la table "users" avec les colonn
 
 ## Exécutez le script Python :
 
+### Install mysql-connector
+
+```bash
+pip install mysql-connector-python
+```
+
 Pour exécuter le script Python qui se trouve dans le conteneur Python, vous pouvez suivre les étapes suivantes :
 ```bash
 docker exec -it <nom_du_conteneur_python> bash
