@@ -23,6 +23,8 @@ conn = mysql.connector.connect(
     password=password,
     database=database
 )
+cursor = conn.cursor()
+
 # Demander le nom d'utilisateur à modifier
 utilisateur_modif = input("Entrez le nom d'utilisateur à modifier : ")
 
