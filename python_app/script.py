@@ -13,9 +13,13 @@ database = config['database']['name']
 user = config['database']['username']
 password = config['database']['password']
 
-# Récupérer les informations de connexion à la tqble users  
-userField = config['database']['uid_field']
+# Récupérer les informations de connexion à la table users  
+table = config['database']['table']
+uidField = config['database']['uid_field']
 passwordField = config['database']['password_field']
+uidName = config['database']['uid_name']
+passwordName = config['database']['password_name']
+
 
 # Récupérer le sel personnalisé
 salt = config['salt']
@@ -33,7 +37,7 @@ cursor = conn.cursor()
 utilisateur_modif = input("Entrez le nom d'utilisateur à modifier : ")
 
 # Vérifier si l'utilisateur existe
-cursor.execute("SELECT * FROM users WHERE username = %s", (utilisateur_modif,))
+cursor.execute("SELECT * FROM " + table + " WHERE " + uidName + " = %s", (utilisateur_modif,))
 result = cursor.fetchone()
 
 if result is None:
@@ -41,7 +45,7 @@ if result is None:
 else:
     # Afficher les informations de l'utilisateur
     print("Informations de l'utilisateur :")
-    print("Nom d'utilisateur :", result[userField])
+    print("Nom d'utilisateur :", result[uidField])
     print("Mot de passe :", result[passwordField])
 
     # Demander confirmation pour la modification
@@ -67,8 +71,8 @@ else:
             mot_de_passe_hash = hashlib.sha1(mot_de_passe_sel.encode()).hexdigest()
 
             # Modifier le mot de passe dans la base de données
-            cursor.execute("UPDATE users SET password = %s WHERE username = %s",
-                           (mot_de_passe_hash, utilisateur_modif))
+            cursor.execute("UPDATE " + table + " SET " + passwordName + " = %s WHERE " + uidName + " = %s",
+                            (mot_de_passe_hash, utilisateur_modif))
 
             # Valider les modifications dans la base de données
             conn.commit()
@@ -85,8 +89,8 @@ input("Appuyez sur une touche pour remettre l'ancien mot de passe...")
 
 try:
     # Remettre l'ancien mot de passe dans la base de données
-    cursor.execute("UPDATE users SET password = %s WHERE username = %s",
-                   (ancien_mot_de_passe, utilisateur_modif))
+    cursor.execute("UPDATE " + table + " SET " + passwordName + " = %s WHERE " + uidName + " = %s",
+                     (ancien_mot_de_passe, utilisateur_modif))
 
     # Valider les modifications dans la base de données
     conn.commit()
