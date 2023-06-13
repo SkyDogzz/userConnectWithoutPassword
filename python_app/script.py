@@ -1,5 +1,5 @@
 import mysql.connector
-import bcrypt
+import hashlib
 from datetime import datetime
 
 # Se connecter à la base de données
@@ -23,8 +23,8 @@ if result is None:
 else:
     # Afficher les informations de l'utilisateur
     print("Informations de l'utilisateur :")
-    print("Nom d'utilisateur :", result[1])
-    print("Mot de passe :", result[2])
+    print("Nom d'utilisateur :", result[0])
+    print("Mot de passe :", result[1])
 
     # Demander confirmation pour la modification
     confirmation = input("Voulez-vous vraiment modifier le mot de passe de cet utilisateur ? (Oui/Non) ")
@@ -34,21 +34,26 @@ else:
         nouveau_mot_de_passe = input("Entrez le nouveau mot de passe : ")
 
         try:
-            # Sauvegarder l'ancien mot de passe crypté dans un fichier avec la date et l'heure
-            ancien_mot_de_passe = result[2]
+            # Sauvegarder l'ancien mot de passe hashé dans un fichier avec la date et l'heure
+            ancien_mot_de_passe = result[1]
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             backup_filename = f"password_backup_hash_{timestamp}.txt"
 
             with open(backup_filename, "w") as backup_file:
                 backup_file.write(ancien_mot_de_passe)
 
-            # Crypter le nouveau mot de passe avec bcrypt
-            salt = bcrypt.gensalt()
-            mot_de_passe_crypte = bcrypt.hashpw(nouveau_mot_de_passe.encode(), salt).decode()
+            # Générer le sel personnalisé
+            sel = "votre_sel"
+
+            # Concaténer le sel avec le nouveau mot de passe
+            mot_de_passe_sel = sel + nouveau_mot_de_passe
+
+            # Calculer le hash SHA1 du mot de passe avec le sel
+            mot_de_passe_hash = hashlib.sha1(mot_de_passe_sel.encode()).hexdigest()
 
             # Modifier le mot de passe dans la base de données
             cursor.execute("UPDATE users SET password = %s WHERE username = %s",
-                           (mot_de_passe_crypte, utilisateur_modif))
+                           (mot_de_passe_hash, utilisateur_modif))
 
             # Valider les modifications dans la base de données
             conn.commit()
