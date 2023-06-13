@@ -1,16 +1,28 @@
 import mysql.connector
 import hashlib
 from datetime import datetime
+import json
 
-# Se connecter à la base de données
+# Lire les informations de configuration à partir du fichier JSON
+with open('config.json') as config_file:
+    config = json.load(config_file)
+
+# Récupérer les informations de connexion à la base de données
+host = config['database']['host']
+database = config['database']['name']
+user = config['database']['username']
+password = config['database']['password']
+
+# Récupérer le sel personnalisé
+salt = config['salt']
+
+# Connexion à la base de données
 conn = mysql.connector.connect(
-    host="mysql",
-    user="your_username",
-    password="your_password",
-    database="your_database_name"
+    host=host,
+    user=user,
+    password=password,
+    database=database
 )
-cursor = conn.cursor()
-
 # Demander le nom d'utilisateur à modifier
 utilisateur_modif = input("Entrez le nom d'utilisateur à modifier : ")
 
@@ -42,11 +54,8 @@ else:
             with open(backup_filename, "w") as backup_file:
                 backup_file.write(ancien_mot_de_passe)
 
-            # Générer le sel personnalisé
-            sel = "votre_sel"
-
             # Concaténer le sel avec le nouveau mot de passe
-            mot_de_passe_sel = sel + nouveau_mot_de_passe
+            mot_de_passe_sel = salt + nouveau_mot_de_passe
 
             # Calculer le hash SHA1 du mot de passe avec le sel
             mot_de_passe_hash = hashlib.sha1(mot_de_passe_sel.encode()).hexdigest()
