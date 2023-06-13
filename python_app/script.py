@@ -14,7 +14,7 @@ user = config['database']['username']
 password = config['database']['password']
 
 # Récupérer les informations de connexion à la tqble users  
-userField = config['database']['user_field']
+userField = config['database']['uid_field']
 passwordField = config['database']['password_field']
 
 # Récupérer le sel personnalisé

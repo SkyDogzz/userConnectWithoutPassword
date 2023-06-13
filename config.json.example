@@ -4,7 +4,7 @@
     "name": "your_database_name",
     "username": "your_username",
     "password": "your_password",
-      "user_field": "0",
+      "uid_field": "0",
       "password_field": "1"
   },
   "salt": "votre_sel_personnalise"
