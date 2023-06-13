@@ -1,0 +1,9 @@
+{
+  "database": {
+    "host": "host",
+    "name": "your_database_name",
+    "username": "your_username",
+    "password": "your_password"
+  },
+  "salt": "votre_sel_personnalise"
+}
