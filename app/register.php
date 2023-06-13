@@ -3,12 +3,18 @@
 $newUsername = $_POST['new_username'];
 $newPassword = $_POST['new_password'];
 
-// Connexion à la base de données
-$servername = 'mysql';
-$database = 'your_database_name';
-$db_username = 'your_username';
-$db_password = 'your_password';
+$config = json_decode(file_get_contents('config.json'), true);
 
+// Récupérer les informations de connexion à la base de données
+$servername = $config['database']['host'];
+$database = $config['database']['name'];
+$db_username = $config['database']['username'];
+$db_password = $config['database']['password'];
+
+// Récupérer le sel personnalisé
+$salt = $config['salt'];
+
+// Connexion à la base de données
 $conn = new mysqli($servername, $db_username, $db_password, $database);
 
 // Vérifier la connexion
@@ -23,8 +29,11 @@ $checkUserResult = $conn->query($checkUserQuery);
 if ($checkUserResult->num_rows > 0) {
     echo 'L\'utilisateur existe déjà. Veuillez choisir un autre nom d\'utilisateur.';
 } else {
-    // Hasher le mot de passe
-    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    // Concaténer le sel avec le mot de passe
+    $passwordWithSalt = $salt . $newPassword;
+
+    // Calculer le hash SHA1 du mot de passe avec le sel
+    $hashedPassword = sha1($passwordWithSalt);
 
     // Insérer l'utilisateur dans la base de données
     $insertUserQuery = "INSERT INTO users (username, password) VALUES ('$newUsername', '$hashedPassword')";

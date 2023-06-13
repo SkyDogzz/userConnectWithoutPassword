@@ -3,12 +3,18 @@
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// Connexion à la base de données
-$servername = 'mysql';
-$database = 'your_database_name';
-$db_username = 'your_username';
-$db_password = 'your_password';
+$config = json_decode(file_get_contents('config.json'), true);
 
+// Récupérer les informations de connexion à la base de données
+$servername = $config['database']['host'];
+$database = $config['database']['name'];
+$db_username = $config['database']['username'];
+$db_password = $config['database']['password'];
+
+// Récupérer le sel personnalisé
+$salt = $config['salt'];
+
+// Connexion à la base de données
 $conn = new mysqli($servername, $db_username, $db_password, $database);
 
 // Vérifier la connexion
@@ -24,8 +30,12 @@ if ($getPasswordResult->num_rows > 0) {
     $row = $getPasswordResult->fetch_assoc();
     $hashedPassword = $row['password'];
 
+    // Calculer le hash SHA1 du mot de passe fourni avec le sel
+    $passwordWithSalt = $salt . $password;
+    $hashedPasswordToCheck = sha1($passwordWithSalt);
+
     // Vérifier le mot de passe
-    if (password_verify($password, $hashedPassword)) {
+    if ($hashedPassword === $hashedPasswordToCheck) {
         echo 'Connexion réussie !';
     } else {
         echo 'Échec de la connexion. Veuillez vérifier vos informations de connexion.';
