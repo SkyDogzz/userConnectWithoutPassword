@@ -11,6 +11,11 @@ $database = $config['database']['name'];
 $db_username = $config['database']['username'];
 $db_password = $config['database']['password'];
 
+# Récupérer les informations de connexion à la table users  
+$table = $config['database']['table'];
+$uidName = $config['database']['uid_name'];
+$$passwordName = $config['database']['password_name'];
+
 // Récupérer le sel personnalisé
 $salt = $config['salt'];
 
@@ -23,7 +28,7 @@ if ($conn->connect_error) {
 }
 
 // Récupérer le mot de passe hashé pour l'utilisateur donné
-$getPasswordQuery = "SELECT password FROM users WHERE username='$username'";
+$getPasswordQuery = "SELECT " . $passwordName . " FROM " . $table . " WHERE " . $uidName . "='$username'";
 $getPasswordResult = $conn->query($getPasswordQuery);
 
 if ($getPasswordResult->num_rows > 0) {

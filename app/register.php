@@ -11,6 +11,11 @@ $database = $config['database']['name'];
 $db_username = $config['database']['username'];
 $db_password = $config['database']['password'];
 
+# Récupérer les informations de connexion à la table users  
+$table = $config['database']['table'];
+$uidName = $config['database']['uid_name'];
+$$passwordName = $config['database']['password_name'];
+
 // Récupérer le sel personnalisé
 $salt = $config['salt'];
 
@@ -23,7 +28,7 @@ if ($conn->connect_error) {
 }
 
 // Vérifier si l'utilisateur existe déjà
-$checkUserQuery = "SELECT * FROM users WHERE username='$newUsername'";
+$checkUserQuery = "SELECT * FROM " . $table . " WHERE " . $uidName . "='$newUsername'";
 $checkUserResult = $conn->query($checkUserQuery);
 
 if ($checkUserResult->num_rows > 0) {
