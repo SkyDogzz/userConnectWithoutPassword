@@ -1,11 +1,14 @@
 {
-  "database": {
-    "host": "host",
-    "name": "your_database_name",
-    "username": "your_username",
-    "password": "your_password",
-      "uid_field": "0",
-      "password_field": "1"
-  },
-  "salt": "votre_sel_personnalise"
+    "database": {
+        "host": "host",
+        "name": "your_database_name",
+        "username": "your_username",
+        "password": "your_password",
+        "uid_field": "0",
+        "password_field": "1"
+        "table": "your_table_name",
+        "uid_name": "your_uid_field_name",
+        "password_name": "your_password_field_name"
+    },
+    "salt": "votre_sel_personnalise"
 }
