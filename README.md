@@ -9,7 +9,6 @@ ou`
 ```bash
 docker-compose up -d
 ```
-
 ## Créer la table "users"
 
 Pour créer la table "users" avec les colonnes "username" et "password", vous pouvez exécuter la requête SQL suivante :

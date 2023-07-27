@@ -1,5 +1,6 @@
 {
     "database": {
+<<<<<<< HEAD
         "host": "host",
         "name": "your_database_name",
         "username": "your_username",
@@ -11,4 +12,17 @@
         "password_name": "your_password_field_name"
     },
     "salt": "votre_sel_personnalise"
+=======
+        "host": Adresse du serveur de base de données,
+        "name": Nom de la base de données,
+        "username": Nom d'utilisateur de la base de données,
+        "password": Mot de passe de la base de données,
+        "uid_field": Numero du champ contenant l'identifiant dans la table,
+        "password_field": Numero du champ contenant le mot de passe dans la table,
+        "table": "jobb_clients",
+        "uid_name": "email",
+        "password_name": "password"
+    },
+    "salt": Salt utilisé pour le hashage des mots de passe,
+>>>>>>> bb4cc7d (yes)
 }
