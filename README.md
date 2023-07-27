@@ -1,90 +1,52 @@
-# userConnectWithoutPassword
+# Projet: Gestion de mot de passe utilisateur avec MySQL
 
-## Lancer le projet
+Ce projet est un script Python conçu pour gérer les mots de passe des utilisateurs stockés dans une base de données MySQL. Le script permet de modifier le mot de passe d'un utilisateur spécifié après confirmation et propose également une fonction de sauvegarde de l'ancien mot de passe avant la mise à jour. Le script utilise le hachage SHA-1 pour stocker les mots de passe dans la base de données.
 
-```bash
-docker compose up -d
-```
-ou`
-```bash
-docker-compose up -d
-```
-## Créer la table "users"
+## Fonctionnalités principales :
 
-Pour créer la table "users" avec les colonnes "username" et "password", vous pouvez exécuter la requête SQL suivante :
+1. Connexion à la base de données MySQL en utilisant les informations fournies dans le fichier de configuration config.json.
+2. Demande à l'utilisateur le nom d'utilisateur dont le mot de passe doit être modifié.
+3. Vérifie si l'utilisateur spécifié existe dans la base de données. Si l'utilisateur n'existe pas, un message approprié est affiché.
+4. Si l'utilisateur existe, affiche les informations de l'utilisateur (nom d'utilisateur et mot de passe).
+5. Demande une confirmation pour la modification du mot de passe.
+6. Si l'utilisateur confirme la modification, il peut entrer un nouveau mot de passe.
+7. Sauvegarde de l'ancien mot de passe dans un fichier texte avant la mise à jour.
+8. Hachage du nouveau mot de passe avec un sel et mise à jour du mot de passe dans la base de données.
+9. En cas d'erreur lors de la mise à jour du mot de passe, le script affiche un message d'erreur approprié et n'effectue pas la mise à jour.
+10. Si l'utilisateur annule la modification, le mot de passe n'est pas mis à jour.
+11. Après la modification (ou l'annulation), le script propose de remettre l'ancien mot de passe en cas d'erreur.
+12. La remise de l'ancien mot de passe est effectuée en mettant à jour la base de données avec la valeur sauvegardée.
 
-```sql
+## Prérequis :
 
-CREATE TABLE users (
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
-```
+1. Python (avec les bibliothèques nécessaires telles que mysql.connector et hashlib).
+2. Base de données MySQL configurée et accessible avec les informations appropriées (hôte, nom de la base de données, nom d'utilisateur, mot de passe).
 
-Cette requête crée une table "users" avec deux colonnes : "username" de type VARCHAR et "password" de type VARCHAR. Les deux colonnes sont marquées comme "NOT NULL", ce qui signifie qu'elles doivent avoir une valeur lors de l'insertion de données.
+## Comment utiliser le script :
 
-## Visualiser les utilisateurs
-
-Pour visualiser les utilisateurs enregistrés dans la table "users", vous pouvez suivre les étapes suivantes :
-
-Connectez-vous au conteneur MySQL :
+1. Assurez-vous que Python est installé sur votre système.
+2. Créez un fichier config.json dans le même répertoire que le script et remplissez-le avec les informations de connexion à la base de données MySQL, ainsi que les noms de table et de colonnes appropriés.
 
 ```bash
-docker exec -it <nom_du_conteneur_mysql> bash
-```
-Connectez-vous à la base de données souhaitée :
-
-```bash
-mysql -u <nom_utilisateur> -p <nom_base_de_données>
-```
-Remplacez <nom_utilisateur> par votre nom d'utilisateur MySQL et <nom_base_de_données> par le nom de votre base de données.
-
-Exécutez la requête pour afficher tous les utilisateurs :
-
-```sql
-SELECT * FROM users;
-```
-   
-Cette requête récupère toutes les colonnes de la table "users" et affiche les enregistrements correspondants.
-
-Assurez-vous d'avoir le bon nom de conteneur MySQL, le nom d'utilisateur et le nom de la base de données pour vous connecter correctement.
-
-N'oubliez pas de remplacer <nom_du_conteneur_mysql>, <nom_utilisateur> et <nom_base_de_données> par les valeurs appropriées dans les commandes.
-
-Ces instructions devraient vous aider à créer la table "users" avec les colonnes "username" et "password" et à visualiser les utilisateurs enregistrés dans la base de données. N'hésitez pas à personnaliser ces instructions en fonction de votre environnement spécifique.
-
-## Exécutez le script Python :
-
-### Install mysql-connector
-
-```bash
-pip install mysql-connector-python
+    {
+        "database": {
+            "host": "localhost",
+            "name": "nom_de_la_base_de_donnees",
+            "username": "nom_d_utilisateur",
+            "password": "mot_de_passe",
+            "table": "nom_de_la_table",
+            "uid_field": "champ_nom_d_utilisateur",
+            "password_field": "champ_mot_de_passe",
+            "uid_name": "nom_colonne_nom_d_utilisateur",
+            "password_name": "nom_colonne_mot_de_passe"
+        },
+        "salt": "votre_sel_pour_hachage"
+    }
 ```
 
-Pour exécuter le script Python qui se trouve dans le conteneur Python, vous pouvez suivre les étapes suivantes :
-```bash
-docker exec -it <nom_du_conteneur_python> bash
-```
+3. Exécutez le script. Il vous demandera le nom d'utilisateur pour lequel vous souhaitez modifier le mot de passe.
+4. Suivez les instructions à l'écran pour modifier ou annuler la modification du mot de passe.
 
-Remplacez <nom_du_conteneur_python> par le nom de votre conteneur Python.
+## Remarques :
 
-Accédez au répertoire où se trouve le script Python :
-
-```bash
-cd chemin_vers_le_script>
-```
-Remplacez <chemin_vers_le_script> par le chemin relatif ou absolu vers le dossier où se trouve votre script Python.
-
-```bash
-python script.py
-```
-
-Remplacez script.py par le nom de votre fichier de script Python.
-
-Le script Python sera exécuté à l'intérieur du conteneur Python et vous verrez les résultats ou les messages d'impression dans la sortie de la console.
-
-Assurez-vous d'avoir le bon nom de conteneur Python et le chemin correct vers le script Python pour exécuter le script avec succès.
-
-N'oubliez pas de remplacer <nom_du_conteneur_python> par le nom approprié de votre conteneur Python et <chemin_vers_le_script> avec le chemin correct vers le script Python dans votre système de fichiers.
-
-Ces instructions devraient vous aider à lancer le script Python qui se trouve dans le conteneur Python.
+- Assurez-vous d'avoir correctement configuré la base de données et les informations de connexion dans le fichier config.json.
